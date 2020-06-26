@@ -27,16 +27,16 @@ The resulting outputs are:
 
 By default the latest build will be automatically pushed into npm, and user will be able to install and use it as following:
 
-`npm i lyrid-js-sdk-dev`
+`npm i lyrid-js-sdk`
 
-`import Lyrid from 'lyrid-js-sdk-dev'`
+`import Lyrid from 'lyrid-js-sdk'`
 
 ### Use the SDK as single js file
 
 We also deliver our Javascript compatible build into our CDN:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/darian68/lyrid-js-sdk@latest/lyrid.js" type="text/javascript"></script>
+<script src="https://storage.googleapis.com/zeta-d1/js/lyrid.js" type="text/javascript"></script>
 ```
 
 ## Usage
@@ -58,11 +58,6 @@ Before executing any request, you need to provide key and secret to the API:
 
 ```js
 const lyrid = new Lyrid(<key>, <secret>);
-```
-You can provide the token also if you alrady have it
-
-```js
-const lyrid = new Lyrid(<key>, <secret>, <token>);
 ```
 
 #### Making requests
