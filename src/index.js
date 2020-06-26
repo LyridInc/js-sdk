@@ -10,6 +10,7 @@ class Lyrid {
     this.secret = secret;
     this.token = token;
     this.endpoint = 'https://api.lyrid.io';
+    this.executeEndpoint = '';
     
     this.getRequest = async function (url) {
       const token = await this.getToken();
@@ -68,11 +69,18 @@ class Lyrid {
   setEndpoint(endpoint) {
     this.endpoint = endpoint;
   }
+  
+  setExecuteEndpoint(endpoint) {
+    this.executeEndpoint = endpoint;
+  }
 
   async execute(id, framework='', inputs='') {
     console.log("executing a function");
     const token = await this.getToken();
-    const requestEndpoint = this.endpoint + '/api/serverless/app/execute/'+ id + "/" + framework;
+    let requestEndpoint = this.endpoint + '/api/serverless/app/execute/'+ id + "/" + framework;
+    if (this.executeEndpoint.length > 0) {
+        requestEndpoint = this.executeEndpoint;
+    }
     const lyridHeaders = new Headers();
     lyridHeaders.append("Content-Type", "application/json");
     lyridHeaders.append("Authorization", "Bearer " + token);
