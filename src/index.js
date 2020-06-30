@@ -1,6 +1,5 @@
 const regeneratorRuntime = require("regenerator-runtime");
 const fetch = require('node-fetch');
-const lyridEndpoint = 'https://api.lyrid.io/';
 global.Headers = fetch.Headers;
 
 
@@ -10,7 +9,9 @@ class Lyrid {
     this.key = key;
     this.secret = secret;
     this.token = token;
-
+    this.endpoint = 'https://api.lyrid.io';
+    this.executeEndpoint = '';
+    
     this.getRequest = async function (url) {
       const token = await this.getToken();
       const lyridHeaders = new Headers();
@@ -54,7 +55,7 @@ class Lyrid {
         body: JSON.stringify({"key": this.key,"secret": this.secret}),
         redirect: 'follow'
       };
-      const response = await fetch("https://api.lyrid.io/auth", requestOptions);
+      const response = await fetch(this.endpoint + "/auth", requestOptions);
       const status = await response.status;
       if (status >= 200 && status < 300) {
         const json = await response.json();
@@ -65,10 +66,21 @@ class Lyrid {
     };
   }
 
+  setEndpoint(endpoint) {
+    this.endpoint = endpoint;
+  }
+  
+  setExecuteEndpoint(endpoint) {
+    this.executeEndpoint = endpoint;
+  }
+
   async execute(id, framework='', inputs='') {
     console.log("executing a function");
     const token = await this.getToken();
-    const requestEndpoint = lyridEndpoint + 'api/serverless/app/execute/'+ id + "/" + framework;
+    let requestEndpoint = this.endpoint + '/api/serverless/app/execute/'+ id + "/" + framework;
+    if (this.executeEndpoint.length > 0) {
+        requestEndpoint = this.executeEndpoint;
+    }
     const lyridHeaders = new Headers();
     lyridHeaders.append("Content-Type", "application/json");
     lyridHeaders.append("Authorization", "Bearer " + token);
@@ -98,28 +110,28 @@ class Lyrid {
   // api/serverless/app/get
   async getApps() {
     console.log("Get apps");
-    const requestEndpoint = lyridEndpoint + 'api/serverless/app/get';
+    const requestEndpoint = this.endpoint + '/api/serverless/app/get';
     return await this.getRequest(requestEndpoint);
   }
 
   // api/serverless/app/get/{appid}
   async getModules(appId) {
     console.log("Get Modules");
-    const requestEndpoint = lyridEndpoint + 'api/serverless/app/get/' + appId;
+    const requestEndpoint = this.endpoint + '/api/serverless/app/get/' + appId;
     return await this.getRequest(requestEndpoint);
   }
 
   // api/serverless/app/get/{appid}/{moduleid}
   async getRevisions(appId, moduleId) {
     console.log("Get Revisions");
-    const requestEndpoint = lyridEndpoint + 'api/serverless/app/get/' + appId + '/' + moduleId;
+    const requestEndpoint = this.endpoint + '/api/serverless/app/get/' + appId + '/' + moduleId;
     return await this.getRequest(requestEndpoint);
   }
 
   // api/serverless/app/get/{appid}/{moduleid}/{revisionid}
   async getFunctions(appId, moduleId, revisionId) {
     console.log("Get functions");
-    const requestEndpoint = lyridEndpoint + 'api/serverless/app/get/' + appId + '/' + moduleId+ '/' + revisionId;
+    const requestEndpoint = this.endpoint + '/api/serverless/app/get/' + appId + '/' + moduleId+ '/' + revisionId;
     return await this.getRequest(requestEndpoint);
   }
 
