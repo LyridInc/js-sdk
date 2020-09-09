@@ -106,6 +106,34 @@ class Lyrid {
         }
       }
   }
+  
+  async executeByName(app, module, tag, functionName, inputs) {
+    console.log("executing a function by name");
+    const token = this.key + ":" + this.secret;
+    const authorization = "Basic " +btoa(token); 
+    let requestEndpoint = this.endpoint + '/x/'+app+'/'+module+'/'+tag+'/'+ functionName;
+    if (this.executeEndpoint.length > 0) {
+        requestEndpoint = this.executeEndpoint;
+    }
+    const lyridHeaders = new Headers();
+    lyridHeaders.append("Content-Type", "application/json");
+    lyridHeaders.append("Authorization", authorization);
+    const requestOptions = {
+      method: 'POST',
+      headers: lyridHeaders,
+      body: inputs,
+      redirect: 'follow'
+    };
+    const response = await fetch(requestEndpoint, requestOptions);
+    console.log(response);
+    const status = await response.status;
+    console.log(status);
+    if (status >= 200 && status < 300) {
+      return await response.json();
+    } else {
+      return await response.text()
+    }
+  }
 
   // api/serverless/app/get
   async getApps() {
