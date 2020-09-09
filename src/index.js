@@ -100,12 +100,13 @@ class Lyrid {
         const resBody = await response.text();
         if (resBody == "Expired authorization token") {
           await this.refreshToken();
+
           // TODO need to cover the endless recursive
           return await this.execute(id, framework, inputs);
         }
       }
   }
-  
+
   // api/serverless/app/get
   async getApps() {
     console.log("Get apps");
@@ -119,7 +120,7 @@ class Lyrid {
     const requestEndpoint = this.endpoint + '/api/serverless/app/get/' + appId;
     return await this.getRequest(requestEndpoint);
   }
-  
+
   // api/serverless/app/get/{appid}/{moduleid}
   async getRevisions(appId, moduleId) {
     console.log("Get Revisions");

@@ -1,5 +1,5 @@
 {
-  "name": "lyrid-js-sdk-dev",
+  "name": "lyrid-js-sdk",
   "version": "1.0.2",
   "description": "A NPM package that consume Lyrid functions.",
   "main": "src/index.js",
@@ -19,7 +19,6 @@
     "lyrid",
     "javascript"
   ],
-  "author": "Darian UNG",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/LyridInc/js-sdk/issues"
